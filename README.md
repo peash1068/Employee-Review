@@ -10,7 +10,7 @@ setp 2: Import the database dump on your local mysql serve and configure the .en
 step 3: Start the laravel serve on port 8080 using
         `php artisan serve --port=8080`
 step 4: Go to the `webportal` folder from command line and run `npm install`
-		Run the webportal(reactjs) using 'npn start' command the webportal will start at 'http://localhost:3000/'. 
+		Run the webportal(reactjs) using `npn start` command the webportal will start at 'http://localhost:3000/'. 
 
 step 5: admin user login is username: admin@gmail.com, password:1234
         Normal User login is username:sajib@gmail.com, password:1234
