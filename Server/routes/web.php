@@ -26,6 +26,10 @@ Route::post('/review', 'LoginController@review')->middleware('cors')->name('Logi
 Route::post('/saveAssignment', 'LoginController@saveAssignment')->middleware('cors')->name('LoginC.saveAssignment');
 Route::post('/getClientEmpList', 'LoginController@getClientEmpList')->middleware('cors')->name('LoginC.getClientEmpList');
 Route::post('/getEmpReviewClient', 'LoginController@getEmpReviewClient')->middleware('cors')->name('LoginC.getEmpReviewClient');
+Route::post('/getAssignment', 'LoginController@getAssignment')->middleware('cors')->name('LoginC.getAssignment');
+Route::post('/deleteAssignment', 'LoginController@deleteAssignment')->middleware('cors')->name('LoginC.getAssignment');
+
+
 
 
 

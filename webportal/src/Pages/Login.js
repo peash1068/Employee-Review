@@ -31,32 +31,38 @@ class Login extends Component {
     handleClick(event){
         var self = this;
         var apiBaseUrl = "http://localhost:8080/login?";
-
-        axios.get(apiBaseUrl+'password='+this.state.password+'&username='+this.state.username)
-            .then(function (response) {
-                /*console.log(response);*/
-                if(response.data.code==200)
-                {
-                    window.User=response.data.id;                                       // Setting a Global variable for later use
-                    sessionStorage.setItem('User', response.data.id);
-                    if(response.data.role==1)
+        if(this.state.password==''||this.state.username==''){
+            alert('Please fill out the form correctly')
+        }else{
+            axios.get(apiBaseUrl+'password='+this.state.password+'&username='+this.state.username)
+                .then(function (response) {
+                    /*console.log(response);*/
+                    if(response.data.code==200)
                     {
-                      //  alert('admin portal');
-                        self.setState({adminUser:1})
-                        sessionStorage.setItem('adminUser', 1);
-                       // console.log(self.props)
+                        window.User=response.data.id;                                       // Setting a Global variable for later use
+                        sessionStorage.setItem('User', response.data.id);
+                        if(response.data.role==1)
+                        {
+                            //  alert('admin portal');
+                            self.setState({adminUser:1})
+                            sessionStorage.setItem('adminUser', 1);                        // Setting Session to identify admin users
+                            // console.log(self.props)
 
-                    }else{
-                       // alert('client')
-                        self.setState({adminUser:2})
-                        sessionStorage.setItem('adminUser', 2);
+                        }else{
+                            // alert('client')
+                            self.setState({adminUser:2})
+                            sessionStorage.setItem('adminUser', 2);                      // Setting Session to identify  users
+                        }
+                        window.location.reload();
+                    }else
+                    {
+                        alert('Login Failed');
                     }
-                    window.location.reload();
-                }else
-                {
-                    alert('Login Failed');
-                }
-            })
+                })
+
+        }
+
+
     }
 
     render() {
@@ -96,8 +102,8 @@ class Login extends Component {
                                                         title="Login"
                                                     />
                                                     <TextField
-                                                        hintText="Enter your Username"
-                                                        floatingLabelText="Username"
+                                                        hintText="Enter your email"
+                                                        floatingLabelText="Email"
                                                         onChange = {(event,newValue) => this.setState({username:newValue})}
                                                     />
                                                     <br/>

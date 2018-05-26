@@ -5,6 +5,7 @@ import Review from './review';
 import AdminEmployeeList from './AdminEmployeeList';
 import Assignment from './Assignment';
 import Nav from './Nav';
+import Checkassignment from './Checkassignment';
 import axios from 'axios';
 
 class Layout extends Component {
@@ -19,6 +20,7 @@ class Layout extends Component {
                         <Route exact path='/' component={AdminEmployeeList} />
                         <Route  path='/review' component={Review}/>
                         <Route  path='/assign' component={Assignment}/>
+                        <Route  path='/checkassignment' component={Checkassignment}/>
                     </Switch>
                     <Nav/>
                 </div>

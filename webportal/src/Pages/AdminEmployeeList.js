@@ -8,7 +8,7 @@ import axios from 'axios';
 
 
 
-
+// Custom CSS for the modal
 const customStyles = {
     content : {
         top                   : '50%',
@@ -33,7 +33,7 @@ class AdminEmployeeList extends Component {
             ],
             modalIsOpen: false,
             action: 'insert',
-            modal:{id:'',name:'',password:'',emp_id:'',role:''}
+            modal:{id:'',name:'',password:'',emp_id:'',role:'0',email:''}
         };
         this.openModal = this.openModal.bind(this);
         this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -51,7 +51,7 @@ class AdminEmployeeList extends Component {
 
 
     openModal(){
-        this.setState({modalIsOpen: true,action:'insert',modal:{id:'',name:'',password:'',emp_id:'',role:''}});
+        this.setState({modalIsOpen: true,action:'insert',modal:{id:'',name:'',password:'',emp_id:'',role:'0',email:''}});  //Resetting state
     }
 
     afterOpenModal() {
@@ -116,6 +116,12 @@ class AdminEmployeeList extends Component {
         items.role=event.target.value;
         self.setState({modal: items});
     }
+    handleEmailChange(event){
+        var self=this;
+        let items = Object.assign({}, this.state.modal);
+        items.email=event.target.value;
+        self.setState({modal: items});
+    }
 
     handleSubmit(event){                                     // Handling Form Submitt
         var apiUpdateUrl='http://localhost:8080/addDelemp';
@@ -127,7 +133,8 @@ class AdminEmployeeList extends Component {
             name:this.state.modal.name,
             password:this.state.modal.password,
             emp_id:this.state.modal.emp_id,
-            role:this.state.modal.role
+            role:this.state.modal.role,
+            email:this.state.modal.email
         }
 
 
@@ -146,12 +153,15 @@ class AdminEmployeeList extends Component {
             })
 
     }
+    componentWillMount() {
+        Modal.setAppElement('body');
+    }
 
 
     render() {
        // console.log('Edit: ',this.state.modal);
-        const emp=this.state.employee;
-        const Articles =emp.map((title, i) => <Article key={i} id={emp[i].id} name={emp[i].emp_name} emp_id={emp[i].emp_id} password={emp[i].password}  role={emp[i].role} delete={this.deleteRecordHandeler.bind(this)} edit={this.editRecordHandeler.bind(this)}/> );
+        const emp=this.state.employee;                          // Creating Table body
+        const Articles =emp.map((title, i) => <Article key={i} id={emp[i].id} name={emp[i].emp_name} emp_id={emp[i].emp_id} email={emp[i].email} password={emp[i].password}  role={emp[i].role} delete={this.deleteRecordHandeler.bind(this)} edit={this.editRecordHandeler.bind(this)}/> );
 
 
         return (
@@ -185,6 +195,7 @@ class AdminEmployeeList extends Component {
                                         <th class="hidden-xs">ID</th>
                                         <th>Name</th>
                                         <th>Employee ID</th>
+                                        <th>Email</th>
                                         <th>Password</th>
                                         <th>Role</th>
                                         <th>Action</th>
@@ -235,7 +246,7 @@ class AdminEmployeeList extends Component {
                         <input type={'hidden'} value={this.state.modal.id}/>
                         <div className="form-group">
                             <label for="emp_name" className="control-label">Name : </label>
-                            <input border="1px" type={'text'} id={'emp_name'} className={'form-control'} value={this.state.modal.name}  onChange ={this.handleNameChange.bind(this)} />
+                            <input border="1px" type={'text'} id={'emp_name'} className={'form-control'} value={this.state.modal.name}  onChange ={this.handleNameChange.bind(this)} required/>
                         </div>
 
                         <div className="form-group">
@@ -249,10 +260,16 @@ class AdminEmployeeList extends Component {
                         </div>
 
                         <div className="form-group">
+                            <label for="{'email'}" className="control-label">Email ID : </label>
+                            <input border="1px" className={'form-control'} type={'email'} id={'email'} value={this.state.modal.email}  onChange ={this.handleEmailChange.bind(this)} pattern="[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*"  />
+                        </div>
+
+                        <div className="form-group">
                             <label for="role" className="control-label">Role : </label>
                             <select id={'role'} className={'form-control'} onChange ={this.handleRoleChange.bind(this)}>
-                                <option value={1}>Admin</option>
-                                <option value={0}>User</option>
+                                <option value={-1} >-Select-</option>
+                                <option value={1} >Admin</option>
+                                <option value={0} >User</option>
                             </select>
                         </div>
 

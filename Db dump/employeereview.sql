@@ -26,11 +26,11 @@ CREATE TABLE `tbl_assignment` (
   `assigned_to` int(10) DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 /*Data for the table `tbl_assignment` */
 
-insert  into `tbl_assignment`(`id`,`emp_list`,`assigned_to`,`updated_at`) values (2,1,8,'2018-05-24 15:23:00'),(4,8,5,'2018-05-24 18:18:20'),(5,1,5,'2018-05-24 19:26:23'),(6,10,5,'2018-05-24 20:53:18');
+insert  into `tbl_assignment`(`id`,`emp_list`,`assigned_to`,`updated_at`) values (9,5,17,'2018-05-26 10:09:08'),(10,17,5,'2018-05-26 10:09:21'),(11,1,17,'2018-05-26 10:10:43'),(13,5,1,'2018-05-26 10:26:47');
 
 /*Table structure for table `tbl_emp` */
 
@@ -39,16 +39,17 @@ DROP TABLE IF EXISTS `tbl_emp`;
 CREATE TABLE `tbl_emp` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `emp_name` varchar(300) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8_swedish_ci DEFAULT NULL,
   `password` varchar(100) COLLATE utf8_swedish_ci DEFAULT NULL,
   `emp_id` varchar(100) COLLATE utf8_swedish_ci DEFAULT NULL,
   `role` int(1) DEFAULT '0',
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 /*Data for the table `tbl_emp` */
 
-insert  into `tbl_emp`(`id`,`emp_name`,`password`,`emp_id`,`role`,`updated_at`) values (1,'admin','1234','E001',1,'2018-05-23 16:51:26'),(5,'lamid','2345','E003',0,'2018-05-23 16:50:01'),(8,'Bruce wane','123','E004',0,'2018-05-24 11:27:46'),(10,'Sajib','1234','E005',0,NULL);
+insert  into `tbl_emp`(`id`,`emp_name`,`email`,`password`,`emp_id`,`role`,`updated_at`) values (1,'Rahat Mahmud','admin@gmail.com','1234','E001',1,'2018-05-26 03:54:43'),(5,'Karim Miah','karim@gmail.com','2345','E002',0,'2018-05-26 04:40:39'),(17,'Sajib Mia','sajib@gmail.com','1234','E003',0,'2018-05-26 04:43:22');
 
 /*Table structure for table `tbl_review` */
 
@@ -62,11 +63,11 @@ CREATE TABLE `tbl_review` (
   `review` text COLLATE utf8_swedish_ci,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 /*Data for the table `tbl_review` */
 
-insert  into `tbl_review`(`id`,`emp_unq_id`,`reviewer_unq_id`,`rate`,`review`,`updated_at`) values (1,1,5,2.003,'Good Boy','2018-05-24 12:15:36'),(4,5,1,2,'Bad Boy','2018-05-24 13:58:03'),(6,8,5,8,'Best','2018-05-24 14:00:22'),(8,5,1,1,'Good Work','2018-05-24 14:52:52'),(9,10,5,10,'Good','2018-05-24 20:53:55');
+insert  into `tbl_review`(`id`,`emp_unq_id`,`reviewer_unq_id`,`rate`,`review`,`updated_at`) values (13,5,1,8.5,'Excellent Worker, Works hard.','2018-05-26 04:08:43'),(14,17,5,7,'Good team worker. Efficient.','2018-05-26 04:13:05'),(18,5,17,7,'Team player.','2018-05-26 04:23:51'),(19,1,17,9,'Good.','2018-05-26 04:24:50');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

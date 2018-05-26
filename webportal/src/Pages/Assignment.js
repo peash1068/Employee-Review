@@ -15,7 +15,7 @@ class Assignment extends Component {
 
         this.state = {
             employee: [
-                {id: '', emp_name: '', emp_id: ''}
+                {id: '', emp_name: '', emp_id: '',email:''}
             ],
             employee_list:'',
             assigned_to:''
@@ -55,7 +55,7 @@ class Assignment extends Component {
 
         const emp = this.state.employee;
         const Dropdown = emp.map((title, i) => <Cteaedropdown key={i} id={emp[i].id} name={emp[i].emp_name}
-                                                              emp_id={emp[i].emp_id}/>);
+                                                              emp_id={emp[i].emp_id} email={emp[i].email}/>);
 
         return(
 

@@ -63,6 +63,9 @@ class Nav extends Component {
                             <li className={archivesClass}>
                                 <Link to={'/assign'} onClick={this.toggleCollapse.bind(this)}>Assign Reviewer</Link>
                             </li>
+                            <li className={archivesClass}>
+                                <Link to={'/checkassignment'} onClick={this.toggleCollapse.bind(this)}>Check Assignment</Link>
+                            </li>
                             <li>
                                 <a onClick={this.handelLogout.bind(this)}>logout</a>
                             </li>

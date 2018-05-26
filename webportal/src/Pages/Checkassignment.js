@@ -2,22 +2,11 @@ import React, {Component} from 'react';
 import Cteaedropdown from './Createdropdown';
 import {Link} from 'react-router-dom';
 import Modal from 'react-modal';
-import Reviewtbl from './Reviewtbl';
+import Assignmenttbl from './Assignmenttbl';
 
 import './table.css';
 import axios from 'axios';
 
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width:'50%'
-    }
-};
 
 
 class Review extends Component {
@@ -32,13 +21,8 @@ class Review extends Component {
             searchTag: '',
             searchResult: [],
             modalIsOpen: false,
-            action: 'insert',
-            modal: {id: '', name: '', rate: '', emp_id: '', review: ''}
         }
 
-        this.openModal = this.openModal.bind(this);
-        this.afterOpenModal = this.afterOpenModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
 
         var self = this;
         axios.post(apiBaseUrl, null)                             // Populating the employee Dropdown using api
@@ -47,24 +31,13 @@ class Review extends Component {
             })
     }
 
-    openModal(){
-        this.setState({modalIsOpen: true,action:'insert',modal:{id: '', name: '', rate: '', emp_id: '', review: ''}});
-    }
-
-    afterOpenModal() {
-        this.subtitle.style.color = '#f00';
-    }
-
-    closeModal() {
-        this.setState({modalIsOpen: false});
-    }
 
     handleSelect(event) {                                        // Changing state on Select
         this.setState({searchTag: event.target.value})
     }
 
     handleSerch(event) {
-        var apiReviewUrl = 'http://localhost:8080/getEmpReview';
+        var apiReviewUrl = 'http://localhost:8080/getAssignment';
         var self = this;
         axios.post(apiReviewUrl, {id: self.state.searchTag})      // Getting Employee Review
             .then(function (response) {
@@ -74,8 +47,8 @@ class Review extends Component {
     }
 
     deleteRecordHandeler(param, e) {
-        var apiDeleteUrl = "http://localhost:8080/deleteReview";
-        var apiReviewUrl = 'http://localhost:8080/getEmpReview';
+        var apiDeleteUrl = "http://localhost:8080/deleteAssignment";
+        var apiReviewUrl = 'http://localhost:8080/getAssignment';
         var self = this;
         axios.post(apiDeleteUrl, {id: param})
             .then(function (response) {
@@ -91,76 +64,18 @@ class Review extends Component {
 
     }
 
-    editRecordHandeler(param, e) {
-        var self=this;
-        self.setState({modal:param});
-        self.setState({action:'update',modalIsOpen: true});
-
-    }
-
-    handleReviewChange(event){
-        var self=this;
-        let items = Object.assign({}, this.state.modal);
-        items.review=event.target.value;
-        self.setState({modal: items});
-
-    }
-    handleSubmit(event){
-        var self=this;
-        var apiPostReviewUrl='http://localhost:8080/review';
-        var apiReviewUrl = 'http://localhost:8080/getEmpReview';
-
-        if(this.state.searchTag==''){
-            alert('Please Search an employee first');
-        }else{
-            var data={
-                id:this.state.modal.id,
-                action:this.state.action,
-                emp_unq_id:this.state.searchTag,
-                reviewer_unq_id:sessionStorage.getItem('User'),
-                review:this.state.modal.review,
-                rate:this.state.modal.rate
-            }
-
-            axios.post(apiPostReviewUrl,data)
-                .then(function (response) {
-                    if(response.data.code==200){
-                        alert('Success');
-                        axios.post(apiReviewUrl, {id: self.state.searchTag})      // Refreshing Employee Review
-                            .then(function (response) {
-                                self.setState({searchResult: response.data,modalIsOpen:false});
-                            })
-
-                    }else{
-                        alert('Failed');
-                    }
-                })
-
-        }
-
-
-
-    }
-    handleRateChange(event){
-        var self=this;
-        let items = Object.assign({}, this.state.modal);
-        items.rate=event.target.value;
-        self.setState({modal: items});
-    }
-
-
     render() {
 
-       // console.log('Se :', window.User);
+        // console.log('Se :', window.User);
         const emp = this.state.employee;
         const reviewer = this.state.searchResult;
         const Dropdown = emp.map((title, i) => <Cteaedropdown key={i} id={emp[i].id} name={emp[i].emp_name}
                                                               emp_id={emp[i].emp_id} email={emp[i].email}/>);
-        const review = reviewer.map((title, i) => <Reviewtbl key={i} id={reviewer[i].id} name={reviewer[i].emp_name}
-                                                             emp_id={reviewer[i].emp_id} review={reviewer[i].review}
-                                                             rate={reviewer[i].rate} email={reviewer[i].email}
+        const review = reviewer.map((title, i) => <Assignmenttbl key={i} id={reviewer[i].id} name={reviewer[i].emp_name}
+                                                             emp_id={reviewer[i].emp_id}
+                                                              email={reviewer[i].email}
                                                              delete={this.deleteRecordHandeler.bind(this)}
-                                                             edit={this.editRecordHandeler.bind(this)}/>);
+                                                            />);
 
 
         return (
@@ -205,11 +120,10 @@ class Review extends Component {
                             <div className="panel-heading">
                                 <div className="row">
                                     <div className="col col-xs-6">
-                                        <h3 className="panel-title">Employee Reviews</h3>
+                                        <h3 className="panel-title">Assigned Employees to him/her</h3>
                                     </div>
                                     <div className="col col-xs-6 text-right">
-                                        <button type="button" className="btn btn-sm btn-primary btn-create" onClick={this.openModal}>Add Review
-                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -218,11 +132,9 @@ class Review extends Component {
                                     <thead>
                                     <tr>
                                         <th className="hidden-xs">ID</th>
-                                        <th>Reviewer Name</th>
-                                        <th>Reviewer ID</th>
-                                        <th>Reviewer Email</th>
-                                        <th>Rate (Scale of 0-10)</th>
-                                        <th>Review</th>
+                                        <th>Name</th>
+                                        <th>Employee ID</th>
+                                        <th>Employee Email</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -256,35 +168,6 @@ class Review extends Component {
                     </div>
                 </div>
 
-                <Modal
-                    isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
-                    onRequestClose={this.closeModal}
-                    style={customStyles}
-                    contentLabel="Example Modal"
-                >
-
-                    <h12 ref={subtitle => this.subtitle = subtitle}>Create New </h12><span><a onClick={this.closeModal}>close</a></span>
-
-                    <div><br/></div>
-                    <form>
-                        <input type={'hidden'} value={this.state.modal.id}/>
-
-                        <div className="form-group">
-                            <label for="{'rate'}" className="control-label">Rates: </label>
-                            <input border="1px" className={'form-control'} type={'text'} id={'rate'} value={this.state.modal.rate}  onChange ={this.handleRateChange.bind(this)} placeholder={'Scale of 0 to 10'}></input>
-                        </div>
-
-                        <div className="form-group">
-                            <label for="{'review'}" className="control-label">Review: </label>
-                            <textarea border="1px" className={'form-control'}  id={'review'} value={this.state.modal.review}  onChange ={this.handleReviewChange.bind(this)} > </textarea>
-                        </div>
-
-
-
-                    </form>
-                    <button className={'btn btn-primary'} onClick={this.handleSubmit.bind(this)}>Save</button>
-                </Modal>
 
             </div>
 

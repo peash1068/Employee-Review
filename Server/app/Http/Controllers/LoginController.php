@@ -18,7 +18,7 @@ class LoginController extends Controller
         $username = $inputs['username'];
         $password = $inputs['password'];
 
-        $result = tbl_empModel::where('emp_name', $username)
+        $result = tbl_empModel::where('email', $username)
             ->where('password', $password)->get();
         if ($result) {
             foreach ($result as $row) {
@@ -61,7 +61,7 @@ class LoginController extends Controller
         if ($inputs['action'] == 'update') {
 
             $result = tbl_empModel::where('id', $inputs['id'])
-                ->update(['emp_name' => $inputs['name'], 'password' => $inputs['password'], 'emp_id' => $inputs['emp_id'], 'role' => $inputs['role']]);
+                ->update(['emp_name' => $inputs['name'], 'password' => $inputs['password'], 'emp_id' => $inputs['emp_id'], 'role' => $inputs['role'],'email'=>$inputs['email']]);
             if ($result) {
                 return ['code' => 200, 'msg' => 'success'];
             } else {
@@ -72,6 +72,7 @@ class LoginController extends Controller
                 'emp_name' => $inputs['name'],
                 'password' => $inputs['password'],
                 'emp_id' => $inputs['emp_id'],
+                'email' =>$inputs['email'],
                 'role' => $inputs['role']
             );
 
@@ -92,7 +93,7 @@ class LoginController extends Controller
         $inputs = request()->input();
 
         $sql = <<<SQL
-        SELECT tbl_review.review,tbl_review.id,tbl_review.rate,tbl_emp.emp_id,tbl_emp.emp_name FROM tbl_review
+        SELECT tbl_review.review,tbl_review.id,tbl_review.rate,tbl_emp.emp_id,tbl_emp.emp_name,tbl_emp.email FROM tbl_review
 JOIN tbl_emp ON tbl_review.reviewer_unq_id=tbl_emp.id
 WHERE tbl_review.emp_unq_id={$inputs['id']}
 
@@ -189,7 +190,7 @@ SQL;
         $inputs = request()->input();
 
         $sql = <<<SQL
-        SELECT tbl_review.review,tbl_review.id,tbl_review.rate,tbl_emp.emp_id,tbl_emp.emp_name FROM tbl_review
+        SELECT tbl_review.review,tbl_review.id,tbl_review.rate,tbl_emp.emp_id,tbl_emp.emp_name,tbl_emp.email FROM tbl_review
 JOIN tbl_emp ON tbl_review.reviewer_unq_id=tbl_emp.id
 WHERE tbl_review.emp_unq_id={$inputs['id']} and tbl_review.reviewer_unq_id={$inputs['emp_id']}
 
@@ -203,6 +204,32 @@ SQL;
                 $res[] = $row;
         }
         return $res;
+
+    }
+
+    public function getAssignment(){
+        $inputs = request()->input();
+        $sql=<<<SQL
+      SELECT tbl_assignment.id,tbl_emp.emp_name,tbl_emp.email,tbl_emp.emp_id FROM tbl_emp 
+JOIN tbl_assignment ON tbl_assignment.emp_list=tbl_emp.id
+WHERE tbl_assignment.assigned_to={$inputs['id']}
+SQL;
+        $result = DB::select($sql);
+        $res = array();
+        if ($result) {
+            foreach ($result as $row)
+                $res[] = $row;
+        }
+        return $res;
+
+    }
+    public function deleteAssignment(){
+        $inputs = request()->input();
+        $result = tbl_assignmentModel::where('id', $inputs['id'])->delete();
+        if ($result)
+            return ['code' => 200, 'msg' => 'success'];
+        else
+            return ['code' => 201, 'msg' => 'Error'];
 
     }
 

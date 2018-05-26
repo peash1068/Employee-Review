@@ -27,13 +27,13 @@ class Review extends Component {
 
         this.state = {
             employee: [
-                {id: '', emp_name: '', emp_id: ''}
+                {id: '', emp_name: '', emp_id: '',email:''}
             ],
             searchTag: '',
             searchResult: [],
             modalIsOpen: false,
             action: 'insert',
-            modal: {id: '', name: '', rate: '', emp_id: '', review: ''}
+            modal: {id: '', name: '', rate: '', emp_id: '', review: '',email:''}
         }
 
         this.openModal = this.openModal.bind(this);
@@ -108,7 +108,7 @@ class Review extends Component {
     handleSubmit(event){
         var self=this;
         var apiPostReviewUrl='http://localhost:8080/review';
-        var apiReviewUrl = 'http://localhost:8080/getEmpReview';
+        var apiReviewUrl = 'http://localhost:8080/getEmpReviewClient';
 
         if(this.state.searchTag==''){
             alert('Please Search an employee first');
@@ -126,9 +126,9 @@ class Review extends Component {
                 .then(function (response) {
                     if(response.data.code==200){
                         alert('Success');
-                        axios.post(apiReviewUrl, {id: self.state.searchTag})      // Refreshing Employee Review
+                        axios.post(apiReviewUrl, {id: self.state.searchTag,emp_id: sessionStorage.getItem('User')})      // Getting Employee Review
                             .then(function (response) {
-                                self.setState({searchResult: response.data,modalIsOpen:false});
+                                self.setState({searchResult: response.data,modalIsOpen: false});
                             })
 
                     }else{
@@ -155,10 +155,10 @@ class Review extends Component {
         const emp = this.state.employee;
         const reviewer = this.state.searchResult;
         const Dropdown = emp.map((title, i) => <Cteaedropdown key={i} id={emp[i].id} name={emp[i].emp_name}
-                                                              emp_id={emp[i].emp_id}/>);
+                                                              emp_id={emp[i].emp_id} email={emp[i].email}/>);
         const review = reviewer.map((title, i) => <Reviewtbl key={i} id={reviewer[i].id} name={reviewer[i].emp_name}
                                                              emp_id={reviewer[i].emp_id} review={reviewer[i].review}
-                                                             rate={reviewer[i].rate}
+                                                             rate={reviewer[i].rate} email={reviewer[i].email}
                                                              delete={this.deleteRecordHandeler.bind(this)}
                                                              edit={this.editRecordHandeler.bind(this)}/>);
 
@@ -220,6 +220,7 @@ class Review extends Component {
                                         <th className="hidden-xs">ID</th>
                                         <th>Reviewer Name</th>
                                         <th>Reviewer ID</th>
+                                        <th>Reviewer Email</th>
                                         <th>Rate (Scale of 0-10)</th>
                                         <th>Review</th>
                                         <th>Action</th>

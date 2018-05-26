@@ -17,6 +17,7 @@ export default class Article extends React.Component {
                 <td class="hidden-xs">{this.props.id}</td>
                 <td>{this.props.name}</td>
                 <td>{this.props.emp_id}</td>
+                <th>{this.props.email}</th>
                 <td>{this.props.password}</td>
                 <td>{role}</td>
                 <td align="center">
